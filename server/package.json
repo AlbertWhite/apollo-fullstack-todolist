@@ -1,0 +1,30 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "apollo-server": "^2.9.12",
+    "nodemon": "^2.0.1",
+    "typescript": "^3.7.2"
+  },
+  "scripts": {
+    "start": "nodemon",
+    "type": "tsc"
+  },
+  "devDependencies": {
+    "eslint": "^6.7.1"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "**/*.test.ts",
+      ".git",
+      "node_modules"
+    ],
+    "watch": [
+      "src"
+    ],
+    "exec": "yarn type && node src/index.js",
+    "ext": "ts"
+  }
+}

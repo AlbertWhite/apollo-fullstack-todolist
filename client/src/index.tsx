@@ -7,7 +7,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 
 // https://www.apollographql.com/docs/react/get-started/#configuration-options for ApolloClient
 const client = new ApolloClient({
-  uri: 'https://48p1r2roz4.sse.codesandbox.io',
+  uri: 'http://localhost:4000',
   cache: new InMemoryCache()
 })
 
