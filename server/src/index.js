@@ -42,20 +42,32 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var ApolloServer = require('apollo-server').ApolloServer;
 var gql = require('apollo-server').gql;
 // schema.js
-var typeDefs = gql(__makeTemplateObject(["\n  type Query {\n    users: [User]\n  }\n\n  # type Mutation {\n  #   addUser()\n  # }\n\n  type Item {\n    id: ID!\n    content: String!\n    finished: Boolean!\n  }\n\n  type User {\n    id: ID!\n    name: String!\n    items: [Item]\n  }\n\n  # use fragment\n"], ["\n  type Query {\n    users: [User]\n  }\n\n  # type Mutation {\n  #   addUser()\n  # }\n\n  type Item {\n    id: ID!\n    content: String!\n    finished: Boolean!\n  }\n\n  type User {\n    id: ID!\n    name: String!\n    items: [Item]\n  }\n\n  # use fragment\n"]));
+var typeDefs = gql(__makeTemplateObject(["\n  type Query {\n    users: [User]\n  }\n\n  type Mutation {\n    addUser(name: String!): UserResponse!\n  }\n\n  type Item {\n    id: ID!\n    content: String!\n    finished: Boolean!\n  }\n\n  type User {\n    id: ID!\n    name: String!\n    items: [Item]\n  }\n\n  type UserResponse{\n    success: Boolean!,\n    users: [User]\n  }\n\n  # use fragment\n"], ["\n  type Query {\n    users: [User]\n  }\n\n  type Mutation {\n    addUser(name: String!): UserResponse!\n  }\n\n  type Item {\n    id: ID!\n    content: String!\n    finished: Boolean!\n  }\n\n  type User {\n    id: ID!\n    name: String!\n    items: [Item]\n  }\n\n  type UserResponse{\n    success: Boolean!,\n    users: [User]\n  }\n\n  # use fragment\n"]));
+var users = [
+    {
+        id: 1,
+        name: 'albert',
+        items: []
+    }
+];
 var resolvers = {
     Query: {
         users: function () { return __awaiter(void 0, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, [
-                        {
-                            id: 1,
-                            name: 'albert',
-                            items: []
-                        }
-                    ]];
+                return [2 /*return*/, users];
             });
         }); }
+    },
+    Mutation: {
+        addUser: function (_, _a) {
+            var name = _a.name;
+            users.push({
+                id: Math.random(),
+                name: name,
+                items: []
+            });
+            return { users: users, success: true };
+        }
     }
 };
 var server = new ApolloServer({

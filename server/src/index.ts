@@ -7,9 +7,9 @@ const typeDefs = gql`
     users: [User]
   }
 
-  # type Mutation {
-  #   addUser()
-  # }
+  type Mutation {
+    addUser(name: String!): UserResponse!
+  }
 
   type Item {
     id: ID!
@@ -23,20 +23,36 @@ const typeDefs = gql`
     items: [Item]
   }
 
+  type UserResponse{
+    success: Boolean!,
+    users: [User]
+  }
+
   # use fragment
 `
+const users = [
+  {
+    id: 1,
+    name: 'albert',
+    items: []
+  }
+]
 
 const resolvers = {
   Query: {
     users: async () => {
-      return [
-        {
-          id: 1,
-          name: 'albert',
-          items: []
-        }
-      ]
+      return users
     }
+  },
+  Mutation: {
+   addUser: (_:any, {name}:any) => {
+    users.push({
+      id: Math.random(),
+      name: name,
+      items: []
+    })
+    return {users, success: true}
+  }
   }
 }
 
