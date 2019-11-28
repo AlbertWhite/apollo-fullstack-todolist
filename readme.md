@@ -17,9 +17,10 @@ Client
 
 Server
 
-1. add eslint, typescript and nodemon with nodemon config
-2. create typeDefs (schema), resolvers and (dataSources) and config ApolloServer
-3. add mutation
+1. Always make the dev from the back, make a test and use it in front.
+2. add eslint, typescript and nodemon with nodemon config
+3. create typeDefs (schema), resolvers and (dataSources) and config ApolloServer
+4. add mutation
 3.1 define schema
 ```graphql
 

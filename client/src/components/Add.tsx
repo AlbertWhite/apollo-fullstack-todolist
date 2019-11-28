@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useRef} from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 
@@ -34,17 +34,22 @@ const Add: React.FC = () => {
     }
   })
 
+  const input = useRef<HTMLInputElement>(null)
+
   if (loading) return <p>Loading...</p>
   if (error) return <p>An error occurred</p>
 
   return (
-    <button
-      onClick={e => {
-        addUser({ variables: { name: '123' } })
-      }}
-    >
-      Add User
-    </button>
+    <>
+      <input ref={input} type="text"/>
+      <button
+        onClick={e => {
+          addUser({ variables: { name: input.current!.value || 'default name'} })
+        }}
+      >
+        Add User
+      </button>
+    </>
   )
 }
 export default Add

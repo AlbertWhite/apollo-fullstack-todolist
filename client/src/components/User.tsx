@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useRef} from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import {gql} from 'apollo-boost'
 
@@ -29,11 +29,34 @@ const GET_USER = gql`
   }
 `
 
+const EDIT_USER = gql`
+  mutation editUser($name: String!, $id: ID!) {
+    editUser(name: $name, id: $id){
+      users{
+        name
+        id
+      }
+      success
+    }
+}
+`
+
 const User: React.FC<UserProps> = ({ name, id }: UserProps) => {
 
-  const [deleteUser, {loading, error}] = useMutation(DELETE_USER, {
+  const [isEditMode, setIsEditMode] = useState(false)
+  const inputRef = useRef<any>(null)
+
+  const [deleteUser] = useMutation(DELETE_USER, {
     update(cache, { data }) {
-      console.warn('alb', data.deleteUser.users);
+      cache.writeQuery({
+        query: GET_USER,
+        data: {users: data.deleteUser.users}
+      })
+    }
+  })
+
+  const [editUser] = useMutation(EDIT_USER, {
+    update(cache, { data }) {
       cache.writeQuery({
         query: GET_USER,
         data: {users: data.deleteUser.users}
@@ -43,8 +66,8 @@ const User: React.FC<UserProps> = ({ name, id }: UserProps) => {
 
   return (
     <div>
-      {name}
-      <button onClick={() => { }}>Edit</button>
+      {isEditMode ? <input type="text" ref={inputRef} /> : name}
+      <button onClick={() => {if(isEditMode) {editUser({variables: {id, name: inputRef.current.value}}); setIsEditMode(false)} else {setIsEditMode(true)}}}>Edit</button>
       <button onClick={e => {deleteUser({variables: {id}})}}>Delete</button>
     </div >
   )

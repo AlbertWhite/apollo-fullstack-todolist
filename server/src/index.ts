@@ -10,6 +10,7 @@ const typeDefs = gql`
   type Mutation {
     addUser(name: String!): UserResponse!
     deleteUser(id: ID!): UserResponse
+    editUser(id: ID!, name: String!): UserResponse!
   }
 
   type Item {
@@ -57,7 +58,11 @@ const resolvers = {
   deleteUser: (_:any, {id}:any) => {
      users = users.filter(user => user.id != id)
      return {users: users.filter(user => user.id != id), success: true}
-  }
+  },
+  editUser: (_:any, {id, name}:any) => {
+    users = users.map(user => {if(user.id == id) {return {id, name, items: []}} return user})
+    return {users: users.map(user => {if(user.id == id) {return {id, name, items: []}} return user}), success: true}
+ }
   }
 }
 
