@@ -9,6 +9,7 @@ const typeDefs = gql`
 
   type Mutation {
     addUser(name: String!): UserResponse!
+    deleteUser(id: ID!): UserResponse
   }
 
   type Item {
@@ -30,7 +31,7 @@ const typeDefs = gql`
 
   # use fragment
 `
-const users = [
+let users = [
   {
     id: 1,
     name: 'albert',
@@ -52,6 +53,10 @@ const resolvers = {
       items: []
     })
     return {users, success: true}
+  },
+  deleteUser: (_:any, {id}:any) => {
+     users = users.filter(user => user.id != id)
+     return {users: users.filter(user => user.id != id), success: true}
   }
   }
 }

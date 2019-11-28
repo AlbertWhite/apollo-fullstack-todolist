@@ -42,7 +42,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var ApolloServer = require('apollo-server').ApolloServer;
 var gql = require('apollo-server').gql;
 // schema.js
-var typeDefs = gql(__makeTemplateObject(["\n  type Query {\n    users: [User]\n  }\n\n  type Mutation {\n    addUser(name: String!): UserResponse!\n  }\n\n  type Item {\n    id: ID!\n    content: String!\n    finished: Boolean!\n  }\n\n  type User {\n    id: ID!\n    name: String!\n    items: [Item]\n  }\n\n  type UserResponse{\n    success: Boolean!,\n    users: [User]\n  }\n\n  # use fragment\n"], ["\n  type Query {\n    users: [User]\n  }\n\n  type Mutation {\n    addUser(name: String!): UserResponse!\n  }\n\n  type Item {\n    id: ID!\n    content: String!\n    finished: Boolean!\n  }\n\n  type User {\n    id: ID!\n    name: String!\n    items: [Item]\n  }\n\n  type UserResponse{\n    success: Boolean!,\n    users: [User]\n  }\n\n  # use fragment\n"]));
+var typeDefs = gql(__makeTemplateObject(["\n  type Query {\n    users: [User]\n  }\n\n  type Mutation {\n    addUser(name: String!): UserResponse!\n    deleteUser(id: ID!): UserResponse\n  }\n\n  type Item {\n    id: ID!\n    content: String!\n    finished: Boolean!\n  }\n\n  type User {\n    id: ID!\n    name: String!\n    items: [Item]\n  }\n\n  type UserResponse{\n    success: Boolean!,\n    users: [User]\n  }\n\n  # use fragment\n"], ["\n  type Query {\n    users: [User]\n  }\n\n  type Mutation {\n    addUser(name: String!): UserResponse!\n    deleteUser(id: ID!): UserResponse\n  }\n\n  type Item {\n    id: ID!\n    content: String!\n    finished: Boolean!\n  }\n\n  type User {\n    id: ID!\n    name: String!\n    items: [Item]\n  }\n\n  type UserResponse{\n    success: Boolean!,\n    users: [User]\n  }\n\n  # use fragment\n"]));
 var users = [
     {
         id: 1,
@@ -67,6 +67,11 @@ var resolvers = {
                 items: []
             });
             return { users: users, success: true };
+        },
+        deleteUser: function (_, _a) {
+            var id = _a.id;
+            users = users.filter(function (user) { return user.id != id; });
+            return { users: users.filter(function (user) { return user.id != id; }), success: true };
         }
     }
 };

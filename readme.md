@@ -51,3 +51,9 @@ mutation addUser($name: String!) {
 ```
 
 3.3 write resolvers
+
+3.4 write mutation and update cache by cache.writeQuery. writeQuery trigger trigger the query and rerender the component.
+
+Question
+1. Cannot use useQuery and useMutation together
+2. What is the real type of ID in javascript, int ?
