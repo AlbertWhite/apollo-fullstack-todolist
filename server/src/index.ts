@@ -47,7 +47,7 @@ const resolvers = {
   Mutation: {
    addUser: (_:any, {name}:any) => {
     users.push({
-      id: Math.random(),
+      id: Math.floor(Math.random() * 100),
       name: name,
       items: []
     })

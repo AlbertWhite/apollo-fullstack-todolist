@@ -62,7 +62,7 @@ var resolvers = {
         addUser: function (_, _a) {
             var name = _a.name;
             users.push({
-                id: Math.random(),
+                id: Math.floor(Math.random() * 100),
                 name: name,
                 items: []
             });

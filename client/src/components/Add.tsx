@@ -5,21 +5,24 @@ import { gql } from 'apollo-boost'
 
 const ADD_USER = gql`
   mutation addUser($name: String!){
-  addUser(name: $name) {
-    id
-    name
+    addUser(name: $name) {
+      users{
+        id
+        name
+      }
+      success
+    }
   }
-}
 `
 
 const Add: React.FC = () => {
-  const [mutation, {data, loading, error}] = useMutation(ADD_USER, {variables: {name: '123'}}) // cannot use mutation in callback
-  
+  // options for useMutation: https://www.apollographql.com/docs/react/api/react-hooks/#options-2
+  const [addUser, {data, loading, error}] = useMutation(ADD_USER) // cannot use mutation in callback
+  console.warn('alb mutation',{data});
   if (loading) return <p>Loading...</p>;
   if (error) return <p>An error occurred</p>;
-  console.warn('alb',{data});
   return (
-    <button onClick={e => mutation}>Add User</button>
+    <button onClick={e => {addUser({variables: {name: '123'}})}}>Add User</button>
   )
 }
 export default Add

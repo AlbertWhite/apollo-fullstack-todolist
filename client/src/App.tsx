@@ -17,7 +17,7 @@ const App: React.FC = () => {
   const { loading, error, data } = useQuery(GET_USER)
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error :(</p>
-  console.warn('alb', { data })
+  console.warn('alb query', { data })
 
   
   return (
