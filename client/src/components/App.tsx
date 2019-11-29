@@ -1,17 +1,10 @@
 import React from 'react'
 import { useQuery, useMutation } from '@apollo/react-hooks'
-import { gql } from 'apollo-boost'
-import User from './components/User'
-import Add from './components/Add'
+import { GET_USER } from '../query'
+import User from './User'
+import Add from './Add'
 
-const GET_USER = gql`
-  {
-    users {
-      id
-      name
-    }
-  }
-`
+
 // https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates how to make add and get work together 
 const App: React.FC = () => {
   const { loading, error, data } = useQuery(GET_USER)

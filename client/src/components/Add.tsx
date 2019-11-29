@@ -1,27 +1,6 @@
 import React, {useRef} from 'react'
 import { useMutation } from '@apollo/react-hooks'
-import { gql } from 'apollo-boost'
-
-const ADD_USER = gql`
-  mutation addUser($name: String!) {
-    addUser(name: $name) {
-      users {
-        id
-        name
-      }
-      success
-    }
-  }
-`
-
-const GET_USER = gql`
-  {
-    users {
-      id
-      name
-    }
-  }
-`
+import { GET_USER, ADD_USER } from '../query'
 
 const Add: React.FC = () => {
   // options for useMutation: https://www.apollographql.com/docs/react/api/react-hooks/#options-2

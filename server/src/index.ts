@@ -29,9 +29,8 @@ const typeDefs = gql`
     success: Boolean!,
     users: [User]
   }
-
-  # use fragment
 `
+
 let users = [
   {
     id: 1,
@@ -54,15 +53,15 @@ const resolvers = {
       items: []
     })
     return {users, success: true}
-  },
-  deleteUser: (_:any, {id}:any) => {
-     users = users.filter(user => user.id != id)
-     return {users: users.filter(user => user.id != id), success: true}
-  },
-  editUser: (_:any, {id, name}:any) => {
-    users = users.map(user => {if(user.id == id) {return {id, name, items: []}} return user})
-    return {users: users.map(user => {if(user.id == id) {return {id, name, items: []}} return user}), success: true}
- }
+    },
+    deleteUser: (_:any, {id}:any) => {
+      users = users.filter(user => user.id != id)
+      return {users: users.filter(user => user.id != id), success: true}
+    },
+    editUser: (_:any, {id, name}:any) => {
+      users = users.map(user => {if(user.id == id) {return {id, name, items: []}} return user})
+      return {users: users.map(user => {if(user.id == id) {return {id, name, items: []}} return user}), success: true}
+    }
   }
 }
 
@@ -74,7 +73,6 @@ const server = new ApolloServer({
     console.log(error)
     return error
   }
-  //dataSources
 })
 
 server.listen({ port: 4000 }).then(() => {

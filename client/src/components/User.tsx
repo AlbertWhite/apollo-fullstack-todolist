@@ -1,45 +1,11 @@
 import React, {useState, useRef} from 'react'
 import { useMutation } from '@apollo/react-hooks'
-import {gql} from 'apollo-boost'
+import {GET_USER, DELETE_USER, EDIT_USER} from '../query'
 
 interface UserProps { 
   name: string
   id: string 
 }
-
-const DELETE_USER = gql`
-  mutation deleteUser($id: ID!) {
-    deleteUser(id: $id){
-      users{
-        name
-        id
-      }
-      success
-    }
-  }
-`
-
-
-const GET_USER = gql`
-  {
-    users {
-      id
-      name
-    }
-  }
-`
-
-const EDIT_USER = gql`
-  mutation editUser($name: String!, $id: ID!) {
-    editUser(name: $name, id: $id){
-      users{
-        name
-        id
-      }
-      success
-    }
-}
-`
 
 const User: React.FC<UserProps> = ({ name, id }: UserProps) => {
 
