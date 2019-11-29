@@ -56,11 +56,8 @@ mutation addUser($name: String!) {
 3.4 write mutation and update cache by cache.writeQuery. writeQuery trigger trigger the query and rerender the component.
 
 Todo:
-1. Add Eslint, refactor
-2. Add CSS for interface
 3. Add todo list
 4. Backend recommendation with dataSource? 
 
 Question
 1. Cannot use useQuery and useMutation together
-2. What is the real type of ID in javascript, int ?

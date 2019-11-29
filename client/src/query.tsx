@@ -5,6 +5,11 @@ export const GET_USER = gql`
     users {
       id
       name
+      items{
+        id
+        content
+        finished
+      }
     }
   }
 `
@@ -15,6 +20,11 @@ export const ADD_USER = gql`
       users {
         id
         name
+        items{
+          id
+          content
+          finished
+        }
       }
       success
     }
@@ -27,6 +37,11 @@ export const DELETE_USER = gql`
       users{
         name
         id
+        items{
+          id
+          content
+          finished
+        }
       }
       success
     }
@@ -39,6 +54,7 @@ export const EDIT_USER = gql`
       users{
         name
         id
+        items
       }
       success
     }

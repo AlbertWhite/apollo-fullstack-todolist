@@ -45,9 +45,15 @@ var gql = require('apollo-server').gql;
 var typeDefs = gql(__makeTemplateObject(["\n  type Query {\n    users: [User]\n  }\n\n  type Mutation {\n    addUser(name: String!): UserResponse!\n    deleteUser(id: ID!): UserResponse\n    editUser(id: ID!, name: String!): UserResponse!\n  }\n\n  type Item {\n    id: ID!\n    content: String!\n    finished: Boolean!\n  }\n\n  type User {\n    id: ID!\n    name: String!\n    items: [Item]\n  }\n\n  type UserResponse{\n    success: Boolean!,\n    users: [User]\n  }\n"], ["\n  type Query {\n    users: [User]\n  }\n\n  type Mutation {\n    addUser(name: String!): UserResponse!\n    deleteUser(id: ID!): UserResponse\n    editUser(id: ID!, name: String!): UserResponse!\n  }\n\n  type Item {\n    id: ID!\n    content: String!\n    finished: Boolean!\n  }\n\n  type User {\n    id: ID!\n    name: String!\n    items: [Item]\n  }\n\n  type UserResponse{\n    success: Boolean!,\n    users: [User]\n  }\n"]));
 var users = [
     {
-        id: 1,
+        id: "user1",
         name: 'albert',
-        items: []
+        items: [
+            {
+                id: "item1",
+                content: 'default item',
+                finished: false
+            }
+        ]
     }
 ];
 var resolvers = {
@@ -62,7 +68,7 @@ var resolvers = {
         addUser: function (_, _a) {
             var name = _a.name;
             users.push({
-                id: Math.floor(Math.random() * 100),
+                id: "user" + Math.floor(Math.random() * 100),
                 name: name,
                 items: []
             });

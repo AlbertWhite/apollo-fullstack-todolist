@@ -1,0 +1,44 @@
+.App{
+  margin: 5%;
+  display: flex;
+}
+
+body{
+  font-size: 18px;
+  font-family: 'Roboto';
+}
+
+button {
+  width: 150px;
+  text-align: left;
+  border: none;
+  background: none;
+  color: blue;
+  text-decoration: underline;
+  font-size: inherit;
+  font-family: inherit;
+}
+
+button:hover{
+  cursor: pointer;
+}
+
+input {
+  border: 0;
+  border-bottom: 1px solid #d8d8d8;
+}
+
+input:focus, input:active, button:focus, button:active{
+  outline: none;
+}
+
+.nameContainer{
+  display: flex;
+  height: 50px;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.nameInput, .name{
+  width: 300px;
+}

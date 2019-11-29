@@ -33,9 +33,15 @@ const typeDefs = gql`
 
 let users = [
   {
-    id: 1,
+    id: `user1`,
     name: 'albert',
-    items: []
+    items: [
+      {
+        id: `item1`,
+        content: 'default item',
+        finished: false 
+      }
+    ]
   }
 ]
 
@@ -48,7 +54,7 @@ const resolvers = {
   Mutation: {
    addUser: (_:any, {name}:any) => {
     users.push({
-      id: Math.floor(Math.random() * 100),
+      id: `user${Math.floor(Math.random() * 100)}`,
       name: name,
       items: []
     })
