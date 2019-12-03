@@ -9,11 +9,12 @@ const typeDefs = gql`
 
   type Mutation {
     addUser(name: String!): UserResponse!
+    addTodo(content: String!, userId: String!): TodosResponse!
     deleteUser(id: ID!): UserResponse
     editUser(id: ID!, name: String!): UserResponse!
   }
 
-  type Item {
+  type Todo {
     id: ID!
     content: String!
     finished: Boolean!
@@ -22,12 +23,18 @@ const typeDefs = gql`
   type User {
     id: ID!
     name: String!
-    items: [Item]
+    todos: [Todo]
   }
 
   type UserResponse{
     success: Boolean!,
     users: [User]
+  }
+
+  type TodosResponse{
+    success: Boolean!
+    userId: ID!
+    todos: [Todo]
   }
 `
 
@@ -35,9 +42,9 @@ let users = [
   {
     id: `user1`,
     name: 'albert',
-    items: [
+    todos: [
       {
-        id: `item1`,
+        id: `todo1`,
         content: 'default item',
         finished: false 
       }
@@ -56,7 +63,7 @@ const resolvers = {
     users.push({
       id: `user${Math.floor(Math.random() * 100)}`,
       name: name,
-      items: []
+      todos: []
     })
     return {users, success: true}
     },
@@ -65,8 +72,31 @@ const resolvers = {
       return {users: users.filter(user => user.id != id), success: true}
     },
     editUser: (_:any, {id, name}:any) => {
-      users = users.map(user => {if(user.id == id) {return {id, name, items: []}} return user})
-      return {users: users.map(user => {if(user.id == id) {return {id, name, items: []}} return user}), success: true}
+      users = users.map(user => {if(user.id == id) {return {id, name, todos: []}} return user})
+      return {users: users.map(user => {if(user.id == id) {return {id, name, todos: []}} return user}), success: true}
+    },
+    addTodo: (_: any, {content, userId}: any) => {
+      let todos
+      users = users.map(user => {
+        if(user.id == userId){ 
+          todos = user.todos
+          todos.push({
+            id: `todo${Math.floor(Math.random() * 100)}`,
+            content,
+            finished: false
+          })
+          return {
+            ...user,
+            todos
+        }} 
+        return user
+      })
+      
+      return {
+        success: true,
+        userId,
+        todos
+      }
     }
   }
 }

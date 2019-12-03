@@ -5,7 +5,7 @@ export const GET_USER = gql`
     users {
       id
       name
-      items{
+      todos{
         id
         content
         finished
@@ -20,7 +20,7 @@ export const ADD_USER = gql`
       users {
         id
         name
-        items{
+        todos{
           id
           content
           finished
@@ -31,13 +31,27 @@ export const ADD_USER = gql`
   }
 `
 
+export const ADD_TODO = gql`
+  mutation addTodo($content: String!, $userId: String!) {
+    addTodo(content: $content, userId: $userId){
+      success
+      userId
+      todos{
+        id
+        content
+        finished
+      }
+    }
+  }
+`
+
 export const DELETE_USER = gql`
   mutation deleteUser($id: ID!) {
     deleteUser(id: $id){
       users{
         name
         id
-        items{
+        todos{
           id
           content
           finished
@@ -54,7 +68,7 @@ export const EDIT_USER = gql`
       users{
         name
         id
-        items
+        todos
       }
       success
     }

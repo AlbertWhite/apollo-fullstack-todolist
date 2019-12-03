@@ -26,11 +26,11 @@ Server
 
 type User {
   id: ID!
-  name: String!
+  name: string!
 }
 
 type Mutation {
-  addUser(name: String!): UserResponse!
+  addUser(name: string!): UserResponse!
 }
 
 type UserResponse {
@@ -56,8 +56,9 @@ mutation addUser($name: String!) {
 3.4 write mutation and update cache by cache.writeQuery. writeQuery trigger trigger the query and rerender the component.
 
 Todo:
-3. Add todo list
+3. How to add refresh todo list without click? 
 4. Backend recommendation with dataSource? 
+5. refactor types no any type
 
 Question
 1. Cannot use useQuery and useMutation together

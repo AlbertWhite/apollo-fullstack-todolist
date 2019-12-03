@@ -1,11 +1,18 @@
 import React, {useRef} from 'react'
 import { useMutation } from '@apollo/react-hooks'
-import { GET_USER, ADD_USER } from '../query'
+import { GET_USER, ADD_USER, ADD_TODO } from '../query'
+import {InterfaceUser} from './User'
 import './App.css'
 
-const Add: React.FC = () => {
+interface AddProps {
+  shouldAddUser?: boolean
+  shouldAddTodo?: boolean
+  userId?: string | null
+}
+
+const Add: React.FC<AddProps> = ({shouldAddTodo, shouldAddUser, userId}) => {
   // options for useMutation: https://www.apollographql.com/docs/react/api/react-hooks/#options-2
-  const [addUser, { loading, error }] = useMutation(ADD_USER, {
+  const [addUser] = useMutation(ADD_USER, {
     update(cache, { data }) {
       cache.writeQuery({
         query: GET_USER,
@@ -14,20 +21,41 @@ const Add: React.FC = () => {
     }
   })
 
-  const input = useRef<HTMLInputElement>(null)
+  const [addTodo] = useMutation(ADD_TODO, {
+    update(cache, { data }) {
+      const users:any = cache.readQuery({query: GET_USER})
+      console.warn('alb',{users});
+      console.warn('alb',{data});
+      cache.writeQuery({
+        query: GET_USER,
+        data: {users : users.users.map((user:any) => {
+          if(user.id == userId){
+            return {
+              ...user,
+              todos: data.addTodo.todos,
+            }
+          }
+          return user
+        })}
+      })
+    }
+  })
 
-  if (loading) return <p>Loading...</p>
-  if (error) return <p>An error occurred</p>
+  
+
+  const input = useRef<HTMLInputElement>(null)
 
   return (
     <div className="nameContainer">
       <input ref={input} type="text" className="nameInput"/>
       <button
         onClick={e => {
-          addUser({ variables: { name: input.current!.value || 'default name'} })
+          shouldAddUser && addUser({ variables: { name: input.current!.value || 'default name'} })
+          shouldAddTodo && addTodo({variables: { content: input.current!.value || 'default name', userId}}) 
         }}
       >
-        Add User
+        {shouldAddUser && 'Add User'}
+        {shouldAddTodo && 'Add Todo'}
       </button>
     </div>
   )

@@ -3,6 +3,17 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
     return cooked;
 };
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -42,14 +53,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var ApolloServer = require('apollo-server').ApolloServer;
 var gql = require('apollo-server').gql;
 // schema.js
-var typeDefs = gql(__makeTemplateObject(["\n  type Query {\n    users: [User]\n  }\n\n  type Mutation {\n    addUser(name: String!): UserResponse!\n    deleteUser(id: ID!): UserResponse\n    editUser(id: ID!, name: String!): UserResponse!\n  }\n\n  type Item {\n    id: ID!\n    content: String!\n    finished: Boolean!\n  }\n\n  type User {\n    id: ID!\n    name: String!\n    items: [Item]\n  }\n\n  type UserResponse{\n    success: Boolean!,\n    users: [User]\n  }\n"], ["\n  type Query {\n    users: [User]\n  }\n\n  type Mutation {\n    addUser(name: String!): UserResponse!\n    deleteUser(id: ID!): UserResponse\n    editUser(id: ID!, name: String!): UserResponse!\n  }\n\n  type Item {\n    id: ID!\n    content: String!\n    finished: Boolean!\n  }\n\n  type User {\n    id: ID!\n    name: String!\n    items: [Item]\n  }\n\n  type UserResponse{\n    success: Boolean!,\n    users: [User]\n  }\n"]));
+var typeDefs = gql(__makeTemplateObject(["\n  type Query {\n    users: [User]\n  }\n\n  type Mutation {\n    addUser(name: String!): UserResponse!\n    addTodo(content: String!, userId: String!): TodosResponse!\n    deleteUser(id: ID!): UserResponse\n    editUser(id: ID!, name: String!): UserResponse!\n  }\n\n  type Todo {\n    id: ID!\n    content: String!\n    finished: Boolean!\n  }\n\n  type User {\n    id: ID!\n    name: String!\n    todos: [Todo]\n  }\n\n  type UserResponse{\n    success: Boolean!,\n    users: [User]\n  }\n\n  type TodosResponse{\n    success: Boolean!\n    userId: ID!\n    todos: [Todo]\n  }\n"], ["\n  type Query {\n    users: [User]\n  }\n\n  type Mutation {\n    addUser(name: String!): UserResponse!\n    addTodo(content: String!, userId: String!): TodosResponse!\n    deleteUser(id: ID!): UserResponse\n    editUser(id: ID!, name: String!): UserResponse!\n  }\n\n  type Todo {\n    id: ID!\n    content: String!\n    finished: Boolean!\n  }\n\n  type User {\n    id: ID!\n    name: String!\n    todos: [Todo]\n  }\n\n  type UserResponse{\n    success: Boolean!,\n    users: [User]\n  }\n\n  type TodosResponse{\n    success: Boolean!\n    userId: ID!\n    todos: [Todo]\n  }\n"]));
 var users = [
     {
         id: "user1",
         name: 'albert',
-        items: [
+        todos: [
             {
-                id: "item1",
+                id: "todo1",
                 content: 'default item',
                 finished: false
             }
@@ -70,7 +81,7 @@ var resolvers = {
             users.push({
                 id: "user" + Math.floor(Math.random() * 100),
                 name: name,
-                items: []
+                todos: []
             });
             return { users: users, success: true };
         },
@@ -82,11 +93,32 @@ var resolvers = {
         editUser: function (_, _a) {
             var id = _a.id, name = _a.name;
             users = users.map(function (user) { if (user.id == id) {
-                return { id: id, name: name, items: [] };
+                return { id: id, name: name, todos: [] };
             } return user; });
             return { users: users.map(function (user) { if (user.id == id) {
-                    return { id: id, name: name, items: [] };
+                    return { id: id, name: name, todos: [] };
                 } return user; }), success: true };
+        },
+        addTodo: function (_, _a) {
+            var content = _a.content, userId = _a.userId;
+            var todos;
+            users = users.map(function (user) {
+                if (user.id == userId) {
+                    todos = user.todos;
+                    todos.push({
+                        id: "todo" + Math.floor(Math.random() * 100),
+                        content: content,
+                        finished: false
+                    });
+                    return __assign(__assign({}, user), { todos: todos });
+                }
+                return user;
+            });
+            return {
+                success: true,
+                userId: userId,
+                todos: todos
+            };
         }
     }
 };
