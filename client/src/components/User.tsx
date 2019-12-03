@@ -43,7 +43,7 @@ const User: React.FC<UserProps> = ({ name, id, selectTodoList }: UserProps) => {
       <div className="name">{isEditMode ? <input type="text" ref={inputRef} placeholder="default name" /> : name}</div>
       <button onClick={() => {if(isEditMode) {editUser({variables: {id, name: inputRef.current.value}}); setIsEditMode(false)} else {setIsEditMode(true)}}}>Edit</button>
       <button onClick={e => {deleteUser({variables: {id}})}}>Delete</button>
-      <button onClick={e => {selectTodoList(id)}}>See Todo List</button>
+      <button onClick={e => {selectTodoList(id)}}>Todo List</button>
     </div >
   )
 }

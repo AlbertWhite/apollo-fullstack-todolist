@@ -25,6 +25,10 @@ const App: React.FC = () => {
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error :(</p>
+    
+  const selectedUser = data.users.find((user: any) => {
+    return user.id == selectedUserId
+  })
   
   return (
     <div className="App">
@@ -35,12 +39,13 @@ const App: React.FC = () => {
         <Add shouldAddUser/>
       </div>
       <div>
+        {selectedUser && <h4>Todo List of {selectedUser.name}</h4>}
         {
           todoList.map((todo: any) => {
             return <Todo todo={todo} userId={selectedUserId} />
           })
         }
-        {todoList.length && <Add shouldAddTodo userId={selectedUserId}/>}
+        {!!todoList.length && <Add shouldAddTodo userId={selectedUserId}/>}
       </div>
     </div>
   )

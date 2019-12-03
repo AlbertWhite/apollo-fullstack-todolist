@@ -56,7 +56,6 @@ mutation addUser($name: String!) {
 3.4 write mutation and update cache by cache.writeQuery. writeQuery trigger trigger the query and rerender the component.
 
 Todo:
-3. How to add refresh todo list without click? 
 4. Backend recommendation with dataSource? 
 5. refactor types no any type
 
