@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import { GET_USER, DELETE_TODO, EDIT_TODO } from '../query'
+import { InterfaceUser } from './User'
 
 export interface InterfaceTodo {
   content: string
@@ -24,7 +25,7 @@ const Todo: React.FC<TodoProps> = ({ todo, userId }) => {
       cache.writeQuery({
         query: GET_USER,
         data: {
-          users: users.users.map((user: any) => {
+          users: users.users.map((user: InterfaceUser) => {
             if (user.id == userId) {
               return {
                 ...user,
@@ -44,7 +45,7 @@ const Todo: React.FC<TodoProps> = ({ todo, userId }) => {
       cache.writeQuery({
         query: GET_USER,
         data: {
-          users: users.users.map((user: any) => {
+          users: users.users.map((user: InterfaceUser) => {
             if (user.id == userId) {
               return {
                 ...user,

@@ -1,6 +1,7 @@
 import React, { useRef } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import { GET_USER, ADD_USER, ADD_TODO } from '../query'
+import { InterfaceUser } from './User'
 import './App.css'
 
 interface AddProps {
@@ -26,7 +27,7 @@ const Add: React.FC<AddProps> = ({ shouldAddTodo, shouldAddUser, userId }) => {
       cache.writeQuery({
         query: GET_USER,
         data: {
-          users: users.users.map((user: any) => {
+          users: users.users.map((user: InterfaceUser) => {
             if (user.id == userId) {
               return {
                 ...user,

@@ -1,63 +1,24 @@
-knex + postgreSQL for database
+### Apollo fullstack Todo List Demo
 
-CRUD: delete may cause manipulating cache directly
+![](screenshot.png)
 
-https://github.com/AlbertWhite/graphql-react/tree/master/react-graphql-apollo
+#### How to use
 
-https://github.com/AlbertWhite/graphql-server
+- `cd server && yarn && yarn start`
+- `cd client && yarn && yarn start`
+- Server on `localhost:4000` and Client on `localhost:3000`
 
-https://github.com/AlbertWhite/graphql-demo/tree/master/query
+#### Config for Client
 
-https://github.com/AlbertWhite/full-stack-apollo-demo
+1. Create react app with typescript
+2. install apollo-boost for writing gql query and ApolloClient. install @apollo/react-hooks for useQuery and useMutation.
 
-Client
+#### Config with Server
 
-1. setup create react app with typescript
-2. install apollo-boost for writing gql query and ApolloClient. install @apollo/react-hooks for useQuery.
+1. TypeScript with Nodemon to hot-reload graphql server
+2. Schema, resolvers on the same file for simplification
+3. No dataSource and database support yet (To do)
 
-Server
+#### Development flow
 
-1. Always make the dev from the back, make a test and use it in front.
-2. add eslint, typescript and nodemon with nodemon config
-3. create typeDefs (schema), resolvers and (dataSources) and config ApolloServer
-4. add mutation
-3.1 define schema
-```graphql
-
-type User {
-  id: ID!
-  name: string!
-}
-
-type Mutation {
-  addUser(name: string!): UserResponse!
-}
-
-type UserResponse {
-  success: Boolean!
-  users: [User]!
-}
-```
-
-3.2 write query
-```graphql
-mutation addUser($name: String!) {
-  addUser(name: $name) {
-    success
-    users {
-      name
-    }
-  }
-}
-```
-
-3.3 write resolvers
-
-3.4 write mutation and update cache by cache.writeQuery. writeQuery trigger trigger the query and rerender the component.
-
-Todo:
-4. Backend recommendation with dataSource? 
-5. refactor types no any type
-
-Question
-1. Cannot use useQuery and useMutation together
+Schema -> Resolver / dataSource -> Write Query -> Test with GQL playground -> Implement on Client

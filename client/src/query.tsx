@@ -68,7 +68,11 @@ export const EDIT_USER = gql`
       users {
         name
         id
-        todos
+        todos {
+          id
+          content
+          finished
+        }
       }
       success
     }
