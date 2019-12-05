@@ -1,15 +1,15 @@
-.App{
+.App {
   margin: 5%;
   display: flex;
 }
 
-body{
+body {
   font-size: 18px;
   font-family: 'Roboto';
 }
 
 button {
-  width: 150px;
+  width: 100px;
   text-align: left;
   border: none;
   background: none;
@@ -19,7 +19,7 @@ button {
   font-family: inherit;
 }
 
-button:hover{
+button:hover {
   cursor: pointer;
 }
 
@@ -28,17 +28,21 @@ input {
   border-bottom: 1px solid #d8d8d8;
 }
 
-input:focus, input:active, button:focus, button:active{
+input:focus,
+input:active,
+button:focus,
+button:active {
   outline: none;
 }
 
-.nameContainer{
+.nameContainer {
   display: flex;
   height: 50px;
   flex-direction: row;
   align-items: baseline;
 }
 
-.nameInput, .name{
-  width: 300px;
+.nameInput,
+.name {
+  width: 200px;
 }

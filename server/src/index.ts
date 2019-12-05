@@ -9,7 +9,14 @@ const typeDefs = gql`
 
   type Mutation {
     addUser(name: String!): UserResponse!
-    addTodo(content: String!, userId: String!): TodosResponse!
+    addTodo(content: String!, userId: ID!): TodosResponse!
+    deleteTodo(userId: ID!, id: ID!): TodosResponse!
+    editTodo(
+      userId: ID!
+      id: ID!
+      content: String!
+      finished: Boolean!
+    ): TodosResponse!
     deleteUser(id: ID!): UserResponse
     editUser(id: ID!, name: String!): UserResponse!
   }
@@ -26,12 +33,12 @@ const typeDefs = gql`
     todos: [Todo]
   }
 
-  type UserResponse{
-    success: Boolean!,
+  type UserResponse {
+    success: Boolean!
     users: [User]
   }
 
-  type TodosResponse{
+  type TodosResponse {
     success: Boolean!
     userId: ID!
     todos: [Todo]
@@ -46,7 +53,7 @@ let users = [
       {
         id: `todo1`,
         content: 'default item',
-        finished: false 
+        finished: false
       }
     ]
   }
@@ -59,26 +66,39 @@ const resolvers = {
     }
   },
   Mutation: {
-   addUser: (_:any, {name}:any) => {
-    users.push({
-      id: `user${Math.floor(Math.random() * 100)}`,
-      name: name,
-      todos: []
-    })
-    return {users, success: true}
+    addUser: (_: any, { name }: any) => {
+      users.push({
+        id: `user${Math.floor(Math.random() * 100)}`,
+        name: name,
+        todos: []
+      })
+      return { users, success: true }
     },
-    deleteUser: (_:any, {id}:any) => {
+    deleteUser: (_: any, { id }: any) => {
       users = users.filter(user => user.id != id)
-      return {users: users.filter(user => user.id != id), success: true}
+      return { users: users.filter(user => user.id != id), success: true }
     },
-    editUser: (_:any, {id, name}:any) => {
-      users = users.map(user => {if(user.id == id) {return {id, name, todos: []}} return user})
-      return {users: users.map(user => {if(user.id == id) {return {id, name, todos: []}} return user}), success: true}
+    editUser: (_: any, { id, name }: any) => {
+      users = users.map(user => {
+        if (user.id == id) {
+          return { id, name, todos: [] }
+        }
+        return user
+      })
+      return {
+        users: users.map(user => {
+          if (user.id == id) {
+            return { id, name, todos: [] }
+          }
+          return user
+        }),
+        success: true
+      }
     },
-    addTodo: (_: any, {content, userId}: any) => {
+    addTodo: (_: any, { content, userId }: any) => {
       let todos
       users = users.map(user => {
-        if(user.id == userId){ 
+        if (user.id == userId) {
           todos = user.todos
           todos.push({
             id: `todo${Math.floor(Math.random() * 100)}`,
@@ -88,10 +108,58 @@ const resolvers = {
           return {
             ...user,
             todos
-        }} 
+          }
+        }
         return user
       })
-      
+
+      return {
+        success: true,
+        userId,
+        todos
+      }
+    },
+    deleteTodo: (_: any, { userId, id }: any) => {
+      let todos
+      users = users.map(user => {
+        if (user.id == userId) {
+          todos = user.todos.filter(todo => todo.id != id)
+          return {
+            ...user,
+            todos
+          }
+        }
+        return user
+      })
+
+      return {
+        success: true,
+        userId,
+        todos
+      }
+    },
+    editTodo: (_: any, { userId, id, content, finished }: any) => {
+      let todos
+      users = users.map(user => {
+        if (user.id == userId) {
+          todos = user.todos.map(todo => {
+            if (todo.id == id) {
+              return {
+                id,
+                content,
+                finished
+              }
+            }
+            return todo
+          })
+          return {
+            ...user,
+            todos
+          }
+        }
+        return user
+      })
+
       return {
         success: true,
         userId,

@@ -53,7 +53,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var ApolloServer = require('apollo-server').ApolloServer;
 var gql = require('apollo-server').gql;
 // schema.js
-var typeDefs = gql(__makeTemplateObject(["\n  type Query {\n    users: [User]\n  }\n\n  type Mutation {\n    addUser(name: String!): UserResponse!\n    addTodo(content: String!, userId: String!): TodosResponse!\n    deleteUser(id: ID!): UserResponse\n    editUser(id: ID!, name: String!): UserResponse!\n  }\n\n  type Todo {\n    id: ID!\n    content: String!\n    finished: Boolean!\n  }\n\n  type User {\n    id: ID!\n    name: String!\n    todos: [Todo]\n  }\n\n  type UserResponse{\n    success: Boolean!,\n    users: [User]\n  }\n\n  type TodosResponse{\n    success: Boolean!\n    userId: ID!\n    todos: [Todo]\n  }\n"], ["\n  type Query {\n    users: [User]\n  }\n\n  type Mutation {\n    addUser(name: String!): UserResponse!\n    addTodo(content: String!, userId: String!): TodosResponse!\n    deleteUser(id: ID!): UserResponse\n    editUser(id: ID!, name: String!): UserResponse!\n  }\n\n  type Todo {\n    id: ID!\n    content: String!\n    finished: Boolean!\n  }\n\n  type User {\n    id: ID!\n    name: String!\n    todos: [Todo]\n  }\n\n  type UserResponse{\n    success: Boolean!,\n    users: [User]\n  }\n\n  type TodosResponse{\n    success: Boolean!\n    userId: ID!\n    todos: [Todo]\n  }\n"]));
+var typeDefs = gql(__makeTemplateObject(["\n  type Query {\n    users: [User]\n  }\n\n  type Mutation {\n    addUser(name: String!): UserResponse!\n    addTodo(content: String!, userId: ID!): TodosResponse!\n    deleteTodo(userId: ID!, id: ID!): TodosResponse!\n    editTodo(\n      userId: ID!\n      id: ID!\n      content: String!\n      finished: Boolean!\n    ): TodosResponse!\n    deleteUser(id: ID!): UserResponse\n    editUser(id: ID!, name: String!): UserResponse!\n  }\n\n  type Todo {\n    id: ID!\n    content: String!\n    finished: Boolean!\n  }\n\n  type User {\n    id: ID!\n    name: String!\n    todos: [Todo]\n  }\n\n  type UserResponse {\n    success: Boolean!\n    users: [User]\n  }\n\n  type TodosResponse {\n    success: Boolean!\n    userId: ID!\n    todos: [Todo]\n  }\n"], ["\n  type Query {\n    users: [User]\n  }\n\n  type Mutation {\n    addUser(name: String!): UserResponse!\n    addTodo(content: String!, userId: ID!): TodosResponse!\n    deleteTodo(userId: ID!, id: ID!): TodosResponse!\n    editTodo(\n      userId: ID!\n      id: ID!\n      content: String!\n      finished: Boolean!\n    ): TodosResponse!\n    deleteUser(id: ID!): UserResponse\n    editUser(id: ID!, name: String!): UserResponse!\n  }\n\n  type Todo {\n    id: ID!\n    content: String!\n    finished: Boolean!\n  }\n\n  type User {\n    id: ID!\n    name: String!\n    todos: [Todo]\n  }\n\n  type UserResponse {\n    success: Boolean!\n    users: [User]\n  }\n\n  type TodosResponse {\n    success: Boolean!\n    userId: ID!\n    todos: [Todo]\n  }\n"]));
 var users = [
     {
         id: "user1",
@@ -92,12 +92,21 @@ var resolvers = {
         },
         editUser: function (_, _a) {
             var id = _a.id, name = _a.name;
-            users = users.map(function (user) { if (user.id == id) {
-                return { id: id, name: name, todos: [] };
-            } return user; });
-            return { users: users.map(function (user) { if (user.id == id) {
+            users = users.map(function (user) {
+                if (user.id == id) {
                     return { id: id, name: name, todos: [] };
-                } return user; }), success: true };
+                }
+                return user;
+            });
+            return {
+                users: users.map(function (user) {
+                    if (user.id == id) {
+                        return { id: id, name: name, todos: [] };
+                    }
+                    return user;
+                }),
+                success: true
+            };
         },
         addTodo: function (_, _a) {
             var content = _a.content, userId = _a.userId;
@@ -109,6 +118,47 @@ var resolvers = {
                         id: "todo" + Math.floor(Math.random() * 100),
                         content: content,
                         finished: false
+                    });
+                    return __assign(__assign({}, user), { todos: todos });
+                }
+                return user;
+            });
+            return {
+                success: true,
+                userId: userId,
+                todos: todos
+            };
+        },
+        deleteTodo: function (_, _a) {
+            var userId = _a.userId, id = _a.id;
+            var todos;
+            users = users.map(function (user) {
+                if (user.id == userId) {
+                    todos = user.todos.filter(function (todo) { return todo.id != id; });
+                    return __assign(__assign({}, user), { todos: todos });
+                }
+                return user;
+            });
+            return {
+                success: true,
+                userId: userId,
+                todos: todos
+            };
+        },
+        editTodo: function (_, _a) {
+            var userId = _a.userId, id = _a.id, content = _a.content, finished = _a.finished;
+            var todos;
+            users = users.map(function (user) {
+                if (user.id == userId) {
+                    todos = user.todos.map(function (todo) {
+                        if (todo.id == id) {
+                            return {
+                                id: id,
+                                content: content,
+                                finished: finished
+                            };
+                        }
+                        return todo;
                     });
                     return __assign(__assign({}, user), { todos: todos });
                 }
