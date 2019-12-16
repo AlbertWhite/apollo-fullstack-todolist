@@ -1,13 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import { GET_USER, DELETE_TODO, EDIT_TODO } from '../query'
-import { InterfaceUser } from './User'
-
-export interface InterfaceTodo {
-  content: string
-  id: string
-  finished: boolean
-}
+import { InterfaceUser, InterfaceTodo } from '../types'
 
 interface TodoProps {
   todo: InterfaceTodo
@@ -21,7 +15,7 @@ const Todo: React.FC<TodoProps> = ({ todo, userId }) => {
 
   const [deleteTodo] = useMutation(DELETE_TODO, {
     update(cache, { data }) {
-      const users: any = cache.readQuery({ query: GET_USER })
+      const users: {users: [InterfaceUser]} = cache.readQuery({ query: GET_USER })
       cache.writeQuery({
         query: GET_USER,
         data: {
@@ -41,7 +35,7 @@ const Todo: React.FC<TodoProps> = ({ todo, userId }) => {
 
   const [editTodo] = useMutation(EDIT_TODO, {
     update(cache, { data }) {
-      const users: any = cache.readQuery({ query: GET_USER })
+      const users: {users: [InterfaceUser]} = cache.readQuery({ query: GET_USER })
       cache.writeQuery({
         query: GET_USER,
         data: {

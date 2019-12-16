@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import { GET_USER, ADD_USER, ADD_TODO } from '../query'
-import { InterfaceUser } from './User'
+import { InterfaceUser, InterfaceAddUserVars, InterfaceAddUserResponse } from '../types'
 import './App.css'
 
 interface AddProps {
@@ -12,18 +12,18 @@ interface AddProps {
 
 const Add: React.FC<AddProps> = ({ shouldAddTodo, shouldAddUser, userId }) => {
   // options for useMutation: https://www.apollographql.com/docs/react/api/react-hooks/#options-2
-  const [addUser] = useMutation(ADD_USER, {
-    update(cache, { data }) {
+  const [addUser] = useMutation<{addUser: InterfaceAddUserResponse},InterfaceAddUserVars>(ADD_USER, {
+    update(cache, { data: { addUser } } ) {
       cache.writeQuery({
         query: GET_USER,
-        data: { users: data.addUser.users }
+        data: { users: addUser.users }
       })
     }
   })
 
   const [addTodo] = useMutation(ADD_TODO, {
     update(cache, { data }) {
-      const users: any = cache.readQuery({ query: GET_USER })
+      const users: {users: [InterfaceUser]} = cache.readQuery({ query: GET_USER })
       cache.writeQuery({
         query: GET_USER,
         data: {

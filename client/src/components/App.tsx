@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { GET_USER } from '../query'
-import User, { InterfaceUser } from './User'
+import User from './User'
 import Add from './Add'
-import Todo, { InterfaceTodo } from './Todo'
+import Todo from './Todo'
+import {InterfaceTodo, InterfaceUser} from '../types'
 
 // https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates how to make add and get work together
 const App: React.FC = () => {

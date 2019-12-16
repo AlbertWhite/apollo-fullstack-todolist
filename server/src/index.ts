@@ -66,19 +66,19 @@ const resolvers = {
     }
   },
   Mutation: {
-    addUser: (_: any, { name }: any) => {
+    addUser: (_: any, { name }: {name: string}) => {
       users.push({
         id: `user${Math.floor(Math.random() * 100)}`,
-        name: name,
+        name,
         todos: []
       })
       return { users, success: true }
     },
-    deleteUser: (_: any, { id }: any) => {
+    deleteUser: (_: any, { id }: {id: string}) => {
       users = users.filter(user => user.id != id)
       return { users: users.filter(user => user.id != id), success: true }
     },
-    editUser: (_: any, { id, name }: any) => {
+    editUser: (_: any, { id, name }: {id: string, name: string}) => {
       users = users.map(user => {
         if (user.id == id) {
           return { id, name, todos: [] }
@@ -95,7 +95,7 @@ const resolvers = {
         success: true
       }
     },
-    addTodo: (_: any, { content, userId }: any) => {
+    addTodo: (_: any, { content, userId }: {content: string, userId: string}) => {
       let todos
       users = users.map(user => {
         if (user.id == userId) {
@@ -119,7 +119,7 @@ const resolvers = {
         todos
       }
     },
-    deleteTodo: (_: any, { userId, id }: any) => {
+    deleteTodo: (_: any, { userId, id }: {userId: string, id: string}) => {
       let todos
       users = users.map(user => {
         if (user.id == userId) {
@@ -138,7 +138,7 @@ const resolvers = {
         todos
       }
     },
-    editTodo: (_: any, { userId, id, content, finished }: any) => {
+    editTodo: (_: any, { userId, id, content, finished }: { userId: string, id: string, content: string, finished: boolean }) => {
       let todos
       users = users.map(user => {
         if (user.id == userId) {
@@ -172,7 +172,7 @@ const resolvers = {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  formatError: (error: any) => {
+  formatError: (error: string) => {
     // show error
     console.log(error)
     return error

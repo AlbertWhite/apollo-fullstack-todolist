@@ -1,14 +1,6 @@
 import React, { useState, useRef } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import { GET_USER, DELETE_USER, EDIT_USER } from '../query'
-import { InterfaceTodo } from './Todo'
-
-export interface InterfaceUser {
-  name: string
-  id: string
-  todos: Array<InterfaceTodo>
-}
-
 interface UserProps {
   name: string
   id: string
