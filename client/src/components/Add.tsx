@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useCallback } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import { GET_USER, ADD_USER, ADD_TODO } from '../query'
 import { InterfaceUser, InterfaceAddUserVars, InterfaceAddUserResponse } from '../types'
@@ -43,25 +43,25 @@ const Add: React.FC<AddProps> = ({ shouldAddTodo, shouldAddUser, userId }) => {
 
   const input = useRef<HTMLInputElement>(null)
 
+  const addCallback = useCallback(() => {
+    shouldAddUser &&
+      addUser({
+        variables: { name: input.current!.value || 'default name' }
+      })
+    shouldAddTodo &&
+      addTodo({
+        variables: {
+          content: input.current!.value || 'default name',
+          userId
+        }
+      })
+    input.current!.value = 'default name'
+  }, [])
+
   return (
     <div className="nameContainer">
       <input ref={input} type="text" className="nameInput" />
-      <button
-        onClick={e => {
-          shouldAddUser &&
-            addUser({
-              variables: { name: input.current!.value || 'default name' }
-            })
-          shouldAddTodo &&
-            addTodo({
-              variables: {
-                content: input.current!.value || 'default name',
-                userId
-              }
-            })
-          input.current!.value = 'default name'
-        }}
-      >
+      <button onClick={addCallback}>
         {shouldAddUser && 'Add User'}
         {shouldAddTodo && 'Add Todo'}
       </button>

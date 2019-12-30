@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useCallback } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import { GET_USER, DELETE_USER, EDIT_USER } from '../query'
 interface UserProps {
@@ -29,6 +29,16 @@ const User: React.FC<UserProps> = ({ name, id, selectTodoList }: UserProps) => {
     }
   })
 
+  // memorized callback, improve performance
+  const toggleEditCallback = useCallback(() => {
+    if (isEditMode) {
+      editUser({ variables: { id, name: inputRef.current.value } })
+      setIsEditMode(false)
+    } else {
+      setIsEditMode(true)
+    }
+  }, [isEditMode])
+
   return (
     <div className="nameContainer">
       <div className="name">
@@ -38,16 +48,7 @@ const User: React.FC<UserProps> = ({ name, id, selectTodoList }: UserProps) => {
           name
         )}
       </div>
-      <button
-        onClick={() => {
-          if (isEditMode) {
-            editUser({ variables: { id, name: inputRef.current.value } })
-            setIsEditMode(false)
-          } else {
-            setIsEditMode(true)
-          }
-        }}
-      >
+      <button onClick={toggleEditCallback}>
         {isEditMode ? 'Save' : 'Edit'}
       </button>
       <button

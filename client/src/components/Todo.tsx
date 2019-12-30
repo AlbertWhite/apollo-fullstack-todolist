@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useCallback } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import { GET_USER, DELETE_TODO, EDIT_TODO } from '../query'
 import { InterfaceUser, InterfaceTodo } from '../types'
@@ -53,6 +53,35 @@ const Todo: React.FC<TodoProps> = ({ todo, userId }) => {
     }
   })
 
+  const toggleEditCallback = useCallback(() => {
+    if (isEditMode) {
+      editTodo({
+        variables: {
+          userId,
+          id: todo.id,
+          content: inputRef.current.value,
+          finished: checkBoxRef.current.checked
+        }
+      })
+      setIsEditMode(false)
+    } else {
+      setIsEditMode(true)
+    }
+  }, [isEditMode])
+
+  const toggleFinishedCallback = useCallback(() => {
+    if (checkBoxRef.current.checked !== todo.finished) {
+      editTodo({
+        variables: {
+          userId,
+          id: todo.id,
+          content: todo.content,
+          finished: checkBoxRef.current.checked
+        }
+      })
+    }
+  }, [])
+
   return (
     <div className="nameContainer">
       <div className="name todo">
@@ -69,23 +98,7 @@ const Todo: React.FC<TodoProps> = ({ todo, userId }) => {
       >
         Delete
       </button>
-      <button
-        onClick={() => {
-          if (isEditMode) {
-            editTodo({
-              variables: {
-                userId,
-                id: todo.id,
-                content: inputRef.current.value,
-                finished: checkBoxRef.current.checked
-              }
-            })
-            setIsEditMode(false)
-          } else {
-            setIsEditMode(true)
-          }
-        }}
-      >
+      <button onClick={toggleEditCallback}>
         {isEditMode ? 'Save' : 'Edit'}
       </button>
       Finished:{' '}
@@ -93,18 +106,7 @@ const Todo: React.FC<TodoProps> = ({ todo, userId }) => {
         type="checkbox"
         ref={checkBoxRef}
         checked={todo.finished}
-        onClick={() => {
-          if (checkBoxRef.current.checked !== todo.finished) {
-            editTodo({
-              variables: {
-                userId,
-                id: todo.id,
-                content: todo.content,
-                finished: checkBoxRef.current.checked
-              }
-            })
-          }
-        }}
+        onClick={toggleFinishedCallback}
       />
     </div>
   )
