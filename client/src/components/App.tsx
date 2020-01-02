@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { GET_USER } from '../query'
 import User from './User'
-import Add from './Add'
+import AddUser from './AddUser'
+import AddTodo from './AddTodo'
 import Todo from './Todo'
-import {InterfaceTodo, InterfaceUser} from '../types'
+import { InterfaceTodo, InterfaceUser } from '../types'
 
 // https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates how to make add and get work together
 const App: React.FC = () => {
@@ -45,14 +46,14 @@ const App: React.FC = () => {
             />
           )
         })}
-        <Add shouldAddUser />
+        <AddUser />
       </div>
       <div>
         {selectedUser && <h4>Todo List of {selectedUser.name}</h4>}
         {todoList.map((todo: InterfaceTodo) => {
           return <Todo todo={todo} userId={selectedUserId} />
         })}
-        {selectedUser && <Add shouldAddTodo userId={selectedUserId} />}
+        {selectedUser && <AddTodo userId={selectedUserId} />}
       </div>
     </div>
   )
